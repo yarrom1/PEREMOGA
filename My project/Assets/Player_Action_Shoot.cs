@@ -25,7 +25,12 @@ public class NewBehaviourScript : MonoBehaviour
 
         // Получаем компонент Rigidbody для пули
         Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
+        
+        // Отключаем гравитацию для пули
+        bulletRb.useGravity = false;
 
+        // Отключаем коллизии между пулями
+        Physics.IgnoreCollision(bullet.GetComponent<Collider>(), GetComponent<Collider>());
         // Применяем силу выстрела к пуле
         bulletRb.AddForce(firePoint.forward * bulletForce, ForceMode.Impulse);
         StartCoroutine(DestroyBullet(bullet));
