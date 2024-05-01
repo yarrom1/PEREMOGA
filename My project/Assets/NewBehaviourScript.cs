@@ -9,6 +9,9 @@ public class NewBehaviourScript : MonoBehaviour
 
     public float bulletForce = 10f; // Сила выстрела пули
     public float maxBulletDistance = 500f;
+
+ 
+
     void Update()
     {
         // При нажатии левой кнопки мыши
@@ -28,22 +31,25 @@ public class NewBehaviourScript : MonoBehaviour
 
         // Применяем силу выстрела к пуле
         bulletRb.AddForce(firePoint.forward * bulletForce, ForceMode.Impulse);
+
+  
         StartCoroutine(DestroyBullet(bullet));
     }
 
     IEnumerator DestroyBullet(GameObject bullet)
     {
-        float distanceTraveled = 0f;
+  
+        yield return new WaitForSeconds(5f); 
 
-        while (distanceTraveled < maxBulletDistance)
-        {
-            // Обновляем расстояние
-            distanceTraveled += bullet.GetComponent<Rigidbody>().velocity.magnitude * Time.deltaTime;
-
-            yield return null;
-        }
-
-        // Удаляем пулю, если она преодолела максимальное расстояние
         Destroy(bullet);
     }
+
+   
+   
+
+
+
 }
+
+
+
