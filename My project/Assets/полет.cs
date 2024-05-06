@@ -37,7 +37,9 @@ public class полет : MonoBehaviour
         {
             rb.velocity = Vector3.zero;
         }
-
-
+    }
+    public void IncreaseSpeed(float amount)
+    {
+        speed += amount;
     }
 }

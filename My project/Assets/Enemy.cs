@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -19,8 +17,14 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
+        // Получаем компонент системы уровней игрока и применяем опыт
+        PlayerLevelSystem playerLevelSystem = FindObjectOfType<PlayerLevelSystem>();
+        if (playerLevelSystem != null)
+        {
+            playerLevelSystem.GainExperience(50); // Например, при убийстве врага игрок получает 50 единиц опыта
+        }
+
         // Уничтожаем объект врага
         Destroy(gameObject);
     }
 }
-

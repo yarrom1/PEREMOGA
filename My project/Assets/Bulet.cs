@@ -2,7 +2,13 @@ using UnityEngine;
 
 public class Bulet : MonoBehaviour
 {
-    public float damage = 50f; // Урон, который наносит пуля
+    public float damage = 50f; 
+   
+
+    void Start()
+    {
+      
+    }
 
     void OnCollisionEnter(Collision collision)
     {
@@ -20,6 +26,10 @@ public class Bulet : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    // Метод для увеличения урона пули
+    public void IncreaseDamage(float amount)
+    {
+        damage += amount;
+    }
 }
-
-
