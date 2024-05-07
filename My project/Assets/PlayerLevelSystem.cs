@@ -1,10 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+using System.Collections.Generic;
 
 public class PlayerLevelSystem : MonoBehaviour
 {
     public int currentLevel = 1;
     public int experience = 0;
+    public int expM = 1;
     public int experienceToNextLevel = 100;
     public GameObject levelUpUI;
     public Button[] skillCards;
@@ -28,7 +31,7 @@ public class PlayerLevelSystem : MonoBehaviour
 
     public void GainExperience(int amount)
     {
-        experience += amount;
+        experience += amount*expM;
         if (experience >= experienceToNextLevel)
         {
             LevelUp();
@@ -44,15 +47,52 @@ public class PlayerLevelSystem : MonoBehaviour
         ShowLevelUpUI();
     }
 
+    
+    // В методе ShowLevelUpUI() заменим skillCards на skillIndex
     private void ShowLevelUpUI()
     {
         isLevelUpScreenActive = true;
         levelUpUI.SetActive(true);
+
+        // Сначала деактивируем все карточки скиллов
         foreach (Button skillCard in skillCards)
         {
-            skillCard.gameObject.SetActive(true);
+            skillCard.gameObject.SetActive(false);
+        }
+
+        // Получаем случайное количество карточек для отображения
+        int numCardsToShow = 3; 
+
+        // Создаем список индексов и заполняем его
+        List<int> indices = new List<int>();
+        for (int i = 0; i < skillCards.Length; i++)
+        {
+            indices.Add(i);
+        }
+
+        // Перемешиваем список индексов
+        for (int i = 0; i < indices.Count; i++)
+        {
+            int temp = indices[i];
+            int randomIndex = UnityEngine.Random.Range(i, indices.Count);
+            indices[i] = indices[randomIndex];
+            indices[randomIndex] = temp;
+        }
+
+        // Отображаем случайные карточки
+        for (int i = 0; i < numCardsToShow; i++)
+        {
+
+            skillCards[indices[i]].gameObject.SetActive(true);
         }
     }
+
+
+
+
+
+
+
 
     public void ChooseSkill(int skillIndex)
     {
@@ -67,6 +107,12 @@ public class PlayerLevelSystem : MonoBehaviour
                 break;
             case 2:
                 IncreaseSpeed(50f);
+                break;
+            case 3:
+                IncreaseHP(50f);
+                break;
+            case 4:
+                Exp(1);
                 break;
             default:
                 Debug.Log("Invalid skill index");
@@ -91,7 +137,11 @@ public class PlayerLevelSystem : MonoBehaviour
         return 100 + currentLevel * 50;
     }
 
+    private void Exp(int amount)
+    {
+        expM += amount;
 
+    }
     private void IncreaseFireRate(float amount)
     {
         // Находим объект Weapon в сцене и увеличиваем его скорость атаки
@@ -109,6 +159,15 @@ public class PlayerLevelSystem : MonoBehaviour
         if (полет != null)
         {
             полет.IncreaseSpeed(amount);
+        }
+    }
+    private void IncreaseHP(float amount)
+    {
+        // Находим объект PlayerMovement и увеличиваем его скорость передвижения
+        Enemy полет = FindObjectOfType<Enemy>();
+        if (полет != null)
+        {
+            полет.IncreaseHP(amount);
         }
     }
 }

@@ -27,4 +27,10 @@ public class Enemy : MonoBehaviour
         // Уничтожаем объект врага
         Destroy(gameObject);
     }
+
+   
+    public void IncreaseHP(float amount)
+    {
+        health -= amount;
+    }
 }
