@@ -88,12 +88,6 @@ public class PlayerLevelSystem : MonoBehaviour
     }
 
 
-
-
-
-
-
-
     public void ChooseSkill(int skillIndex)
     {
         Debug.Log("Skill chosen: " + skillIndex);
