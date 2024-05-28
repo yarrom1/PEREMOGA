@@ -9,14 +9,13 @@ public class полет : MonoBehaviour
     public float speedmouse = 10f;
 
     Rigidbody rb;
-    // Start is called before the first frame update
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
 
     }
 
-    // Update is called once per frame
     void Update()
     {
 
@@ -25,11 +24,11 @@ public class полет : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");
 
 
-        // ѕолучаем значени€ движени€ мыши по ос€м
+
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
         transform.Rotate(Vector3.up, mouseX * speedmouse, Space.World);
-        // transform.Rotate(Vector3.left, mouseY * speedmouse, Space.Self);
+
         Vector3 movement = new Vector3(0f, 0f, vertical) * speed * Time.deltaTime;
         transform.Translate(movement);
 

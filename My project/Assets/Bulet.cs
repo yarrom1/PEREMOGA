@@ -22,7 +22,7 @@ public class Bulet : MonoBehaviour
                 enemy.TakeDamage(damage);
             }
 
-            // ”ничтожаем пулю
+           
             Destroy(gameObject);
         }
     }

@@ -4,38 +4,48 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     public GameObject enemyPrefab; // Префаб врага
+
     public Transform player; // Ссылка на игрока
-    public float spawnInterval = 5f; // Интервал спавна врагов
+    public int enemiesPerWave = 5; // Количество врагов в одной волне
+    public float waveInterval = 20f; // Интервал между волнами
     public float spawnDistance = 10f; // Расстояние спавна от игрока
+    public float spawnInterval = 1f; // Интервал спавна внутри волны
+
+ 
 
     void Start()
     {
-        // Начинаем спавнить врагов
-        StartCoroutine(SpawnEnemies());
+    
+
+
+        StartCoroutine(SpawnWaves());
     }
 
-    IEnumerator SpawnEnemies()
+    IEnumerator SpawnWaves()
     {
         while (true)
         {
-            // Вычисляем позицию спавна врага
-            Vector3 spawnPosition = player.position + Random.onUnitSphere * spawnDistance;
-            spawnPosition.y = player.position.y; // Устанавливаем высоту спавна равной высоте игрока
+            for (int i = 0; i < enemiesPerWave; i++)
+            {
 
-            // Создаем экземпляр врага из префаба
-            GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+                Vector3 spawnPosition =  Random.insideUnitSphere * 2f;
+                spawnPosition.y = player.position.y;
 
-            // Добавляем скрипт Enemy к врагу
-            enemy.AddComponent<Enemy>();
-        
 
-            // Устанавливаем тег Enemy для врага
-            enemy.tag = "Enemy";
+                GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
 
-            // Ждем заданный интервал перед следующим спавном
-            yield return new WaitForSeconds(spawnInterval);
+
+                enemy.AddComponent<Enemy>();
+                enemy.AddComponent<EnemyAI>();
+ 
+                enemy.tag = "Enemy";
+
+
+                yield return new WaitForSeconds(spawnInterval);
+            }
+
+
+            yield return new WaitForSeconds(waveInterval);
         }
     }
-
 }
-

@@ -3,7 +3,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public float health = 100f; // Здоровье врага
-
+    public Material deathMaterial;
     public void TakeDamage(float damage)
     {
         health -= damage; // Уменьшаем здоровье врага
@@ -24,6 +24,9 @@ public class Enemy : MonoBehaviour
             playerLevelSystem.GainExperience(50); // Например, при убийстве врага игрок получает 50 единиц опыта
         }
 
+        GameObject deathEffect = new GameObject("DeathEffect");
+        deathEffect.transform.position = transform.position;
+        deathEffect.AddComponent<MeshRenderer>().material = deathMaterial;
         // Уничтожаем объект врага
         Destroy(gameObject);
     }
