@@ -31,7 +31,7 @@ public class PlayerLevelSystem : MonoBehaviour
 
     public void GainExperience(int amount)
     {
-        experience += amount*expM;
+        experience += amount * expM;
         if (experience >= experienceToNextLevel)
         {
             LevelUp();
@@ -47,30 +47,23 @@ public class PlayerLevelSystem : MonoBehaviour
         ShowLevelUpUI();
     }
 
-    
-    // В методе ShowLevelUpUI() заменим skillCards на skillIndex
     private void ShowLevelUpUI()
     {
         isLevelUpScreenActive = true;
         levelUpUI.SetActive(true);
 
-        // Сначала деактивируем все карточки скиллов
         foreach (Button skillCard in skillCards)
         {
             skillCard.gameObject.SetActive(false);
         }
 
-        // Получаем случайное количество карточек для отображения
-        int numCardsToShow = 3; 
-
-        // Создаем список индексов и заполняем его
+        int numCardsToShow = 3;
         List<int> indices = new List<int>();
         for (int i = 0; i < skillCards.Length; i++)
         {
             indices.Add(i);
         }
 
-        // Перемешиваем список индексов
         for (int i = 0; i < indices.Count; i++)
         {
             int temp = indices[i];
@@ -79,14 +72,11 @@ public class PlayerLevelSystem : MonoBehaviour
             indices[randomIndex] = temp;
         }
 
-        // Отображаем случайные карточки
         for (int i = 0; i < numCardsToShow; i++)
         {
-
             skillCards[indices[i]].gameObject.SetActive(true);
         }
     }
-
 
     public void ChooseSkill(int skillIndex)
     {
@@ -108,6 +98,18 @@ public class PlayerLevelSystem : MonoBehaviour
             case 4:
                 Exp(1);
                 break;
+            case 5:
+                ChangeProjectileType("rocket");
+                break;
+            case 6:
+                ChangeProjectileType("shotgun");
+                break;
+            case 7:
+                ChangeProjectileType("machinegun");
+                break;
+            case 8:
+                ChangeProjectileType("laser");
+                break;
             default:
                 Debug.Log("Invalid skill index");
                 break;
@@ -118,9 +120,8 @@ public class PlayerLevelSystem : MonoBehaviour
 
     private void IncreaseBulletDamage(float amount)
     {
-        // Находим все объекты Bullet в сцене и увеличиваем их урон
-        Bulet[] bullets = FindObjectsOfType<Bulet>();
-        foreach (Bulet bullet in bullets)
+        Bullet[] bullets = FindObjectsOfType<Bullet>();
+        foreach (Bullet bullet in bullets)
         {
             bullet.IncreaseDamage(amount);
         }
@@ -134,34 +135,41 @@ public class PlayerLevelSystem : MonoBehaviour
     private void Exp(int amount)
     {
         expM += amount;
-
     }
+
     private void IncreaseFireRate(float amount)
     {
-        // Находим объект Weapon в сцене и увеличиваем его скорость атаки
-        shoot weapon = FindObjectOfType<shoot>();
+        Shoot weapon = FindObjectOfType<Shoot>();
         if (weapon != null)
         {
             weapon.IncreaseFireRate(amount);
         }
-
     }
+
     private void IncreaseSpeed(float amount)
     {
-        // Находим объект PlayerMovement и увеличиваем его скорость передвижения
         полет полет = FindObjectOfType<полет>();
         if (полет != null)
         {
             полет.IncreaseSpeed(amount);
         }
     }
+
     private void IncreaseHP(float amount)
     {
-        // Находим объект PlayerMovement и увеличиваем его скорость передвижения
-        Enemy полет = FindObjectOfType<Enemy>();
-        if (полет != null)
+        Enemy enemy = FindObjectOfType<Enemy>();
+        if (enemy != null)
         {
-            полет.IncreaseHP(amount);
+            enemy.IncreaseHP(amount);
+        }
+    }
+
+    private void ChangeProjectileType(string type)
+    {
+        Shoot weapon = FindObjectOfType<Shoot>();
+        if (weapon != null)
+        {
+            weapon.ChangeProjectileType(type);
         }
     }
 }

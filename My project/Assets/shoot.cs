@@ -1,72 +1,82 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using YourNamespace;
 
-public class shoot : MonoBehaviour
+public class Shoot : MonoBehaviour
 {
-    public GameObject bulletPrefab; // Префаб пули
-    public Transform firePoint; // Точка, откуда будут выпускаться пули
+    public GameObject bulletPrefab;
+    public GameObject rocketPrefab;
+    public GameObject shotgunPelletPrefab;
+    public LineRenderer laserPrefab;
 
-    public float bulletForce = 10f; // Сила выстрела пули
-    public float maxBulletDistance = 500f;
-    public float fireRate = 1f; // Скорострельность: время между выстрелами
-    private float nextFireTime = 0f; // Время следующего возможного выстрела
+    public Transform[] firePoints; 
+    private Projectile currentProjectile;
+    private float nextFireTime = 0f;
+
+    private enum ProjectileType { Bullet, Rocket, Shotgun, MachineGun, Laser }
+
+    void Start()
+    {
+        ChangeProjectileType("Bullet");
+    }
 
     void Update()
     {
-        // Проверяем, можно ли стрелять сейчас
-        if (Time.time >= nextFireTime)
+        if (Time.time >= nextFireTime && Input.GetButtonDown("Fire1"))
         {
-            // При нажатии левой кнопки мыши
-            if (Input.GetButtonDown("Fire1"))
+            ShootProjectile();
+            nextFireTime = Time.time + currentProjectile.nextFireDelay;
+        }
+    }
+
+    public void ChangeProjectileType(string type)
+    {
+        switch (type)
+        {
+            case "rocket":
+                currentProjectile = rocketPrefab.GetComponent<Rocket>();
+                break;
+            case "shotgun":
+                currentProjectile = shotgunPelletPrefab.GetComponent<Shotgun>();
+                break;
+            case "laser":
+                currentProjectile = laserPrefab.GetComponent<Laser>();
+                break;
+            default:
+                currentProjectile = bulletPrefab.GetComponent<Bullet>();
+                break;
+        }
+    }
+
+    void ShootProjectile()
+    {
+        if (currentProjectile == null) return;
+
+        foreach (Transform firePoint in firePoints)
+        {
+            GameObject projectileInstance = Instantiate(currentProjectile.gameObject, firePoint.position, firePoint.rotation);
+            Rigidbody rb = projectileInstance.GetComponent<Rigidbody>();
+            rb.AddForce(firePoint.forward * currentProjectile.bulletForce, ForceMode.Impulse);
+            StartCoroutine(DestroyProjectile(projectileInstance));
+
+            if (projectileInstance.GetComponent<Shotgun>() != null)
             {
-                Shoot(); // Вызываем метод выстрела
-                nextFireTime = Time.time + fireRate; // Обновляем время следующего возможного выстрела
+                projectileInstance.GetComponent<Shotgun>().Shoot();
             }
         }
     }
 
-    void Shoot()
+    IEnumerator DestroyProjectile(GameObject projectile)
     {
-        // Создаем экземпляр пули из префаба
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-
-        // Получаем компонент Rigidbody для пули
-        Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
-
-        // Применяем силу выстрела к пуле
-        bulletRb.AddForce(firePoint.forward * bulletForce, ForceMode.Impulse);
-
-  
-        StartCoroutine(DestroyBullet(bullet));
+        yield return new WaitForSeconds(5f);
+        Destroy(projectile);
     }
-
-    IEnumerator DestroyBullet(GameObject bullet)
-    {
-  
-        yield return new WaitForSeconds(5f); 
-
-        Destroy(bullet);
-    }
-
-
-    void OnCollisionEnter(Collision collision)
-    {
-        // Если игрок столкнулся с врагом
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            Destroy(gameObject);
-          
-            Debug.Log("Игра окончена");
-        }
-    }
-
 
     public void IncreaseFireRate(float amount)
     {
-        fireRate -= amount;
+        if (currentProjectile != null)
+        {
+            currentProjectile.fireRate -= amount;
+        }
     }
 }
-
-
-

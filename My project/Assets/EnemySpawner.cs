@@ -27,7 +27,7 @@ public class EnemySpawner : MonoBehaviour
         {
             for (int i = 0; i < enemiesPerWave; i++)
             {
-
+                Quaternion spawnRotation = Quaternion.Euler(90, 0, 0);
                 Vector3 spawnPosition =  Random.insideUnitSphere * 2f;
                 spawnPosition.y = player.position.y;
 
