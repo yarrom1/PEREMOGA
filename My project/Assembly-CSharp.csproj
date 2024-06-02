@@ -64,11 +64,13 @@
     <Compile Include="Assets\DissolveEmissionShader\DissolveSphere.cs" />
     <Compile Include="Assets\New Folder 1\Projectile.cs" />
     <Compile Include="Assets\player.cs" />
+    <Compile Include="Assets\NewBehaviourScript.cs" />
     <Compile Include="Assets\New Folder 1\rocket.cs" />
     <Compile Include="Assets\EnemySpawner.cs" />
     <Compile Include="Assets\EnemyAI.cs" />
     <Compile Include="Assets\meteor\Fly.cs" />
     <Compile Include="Assets\полет.cs" />
+    <Compile Include="Assets\Bulet.cs" />
     <Compile Include="Assets\New Folder 1\Pellet.cs" />
     <Compile Include="Assets\New Folder 1\Bullet.cs" />
     <Compile Include="Assets\New Folder 1\laser.cs" />
