@@ -12,6 +12,8 @@ public class PlayerLevelSystem : MonoBehaviour
     public GameObject levelUpUI;
     public Button[] skillCards;
     private bool isLevelUpScreenActive = false;
+   
+
 
     void Update()
     {
